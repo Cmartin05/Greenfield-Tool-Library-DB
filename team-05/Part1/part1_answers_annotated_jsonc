@@ -1,0 +1,23 @@
+
+{
+  // Method: Python script using the csv and datetime modules.
+  // All calculations use the original CSV files.
+
+  // Count rows in loans.csv where member_email matches
+  // "carlos.novak781@proton.me".
+  // Strip extra spaces and convert emails to lowercase.
+  // Include all matching rows, even exact duplicates.
+  "focus_member_rows": 22,
+
+  // Read members.csv and normalize all email addresses
+  // by removing surrounding spaces and ignoring case.
+  // Group rows by email and identify the smallest member_id.
+  // Count every additional row belonging to that email.
+  "duplicate_member_rows": 13,
+
+  // Read loans.csv and compare back_date with out_date.
+  // Convert both YYYY-MM-DD and MM/DD/YYYY into dates.
+  // Count rows where back_date is earlier than out_date.
+  // Exclude blank return dates but include duplicate rows.
+  "bad_return_rows": 62
+}
