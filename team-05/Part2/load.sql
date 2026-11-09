@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS stg_staff;
 DROP TABLE IF EXISTS stg_members;
 DROP TABLE IF EXISTS stg_categories;
 
---Load every CSV into a text-only staging table.
+-- Load every CSV into a text-only staging table.
 CREATE TABLE stg_categories (
     category_id VARCHAR(20),
     name VARCHAR(100),
