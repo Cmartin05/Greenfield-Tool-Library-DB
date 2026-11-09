@@ -99,14 +99,21 @@ FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
 
+UPDATE stg_categories      SET requires_cert = REPLACE(requires_cert, '\r', '');
+UPDATE stg_members         SET status        = REPLACE(status,        '\r', '');
+UPDATE stg_staff           SET email         = REPLACE(email,         '\r', '');
+UPDATE stg_inventory       SET `condition`   = REPLACE(`condition`,   '\r', '');
+UPDATE stg_certifications  SET certified_on  = REPLACE(certified_on,  '\r', '');
+UPDATE stg_loans           SET fee_charged   = REPLACE(fee_charged,   '\r', '');
+
 -- Fill independent tables first.
 INSERT INTO category
     (category_id, name, daily_late_fee,
-     max_loan_days, requires_cert)
+     max_loan_days, requires_certification)
 SELECT
     CAST(category_id AS UNSIGNED),
     name,
-    CAST(daily_late_fee AS DECIMAL(8, 2)),
+    CAST(daily_late_fee AS DECIMAL(6, 2)),
     CAST(max_loan_days AS UNSIGNED),
     CASE
         WHEN UPPER(TRIM(requires_cert)) = 'Y'
@@ -117,7 +124,7 @@ FROM stg_categories;
 
 INSERT INTO `member`
     (member_id, first_name, last_name,
-     email, zip, joined, status)
+     email, zip, join_date, status)
 SELECT
     CAST(m.member_id AS UNSIGNED),
     m.first_name,
@@ -154,7 +161,7 @@ FROM stg_staff;
 
 INSERT INTO tool
     (tool_id, name, brand, category_id,
-     purchased, price, `condition`)
+     purchase_date, purchase_price, tool_condition)
 SELECT
     CAST(i.tool_id AS UNSIGNED),
     i.name,
@@ -167,7 +174,7 @@ SELECT
     END,
     CAST(
         REPLACE(REPLACE(TRIM(i.price), '$', ''), ',', '')
-        AS DECIMAL(10, 2)
+        AS DECIMAL(8, 2)
     ),
     REPLACE(LOWER(TRIM(i.`condition`)), ' ', '_')
 FROM stg_inventory AS i
